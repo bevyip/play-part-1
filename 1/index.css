@@ -1,106 +1,35 @@
-@font-face {
-  font-family: "Satoshi";
-  src: url("/fonts/Satoshi-Regular.otf") format("opentype");
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Satoshi";
-  src: url("/fonts/Satoshi-Italic.otf") format("opentype");
-  font-weight: 400;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: "Satoshi";
-  src: url("/fonts/Satoshi-Light.otf") format("opentype");
-  font-weight: 300;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Satoshi";
-  src: url("/fonts/Satoshi-LightItalic.otf") format("opentype");
-  font-weight: 300;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: "Satoshi";
-  src: url("/fonts/Satoshi-Medium.otf") format("opentype");
-  font-weight: 500;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Satoshi";
-  src: url("/fonts/Satoshi-MediumItalic.otf") format("opentype");
-  font-weight: 500;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: "Satoshi";
-  src: url("/fonts/Satoshi-Bold.otf") format("opentype");
-  font-weight: 700;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Satoshi";
-  src: url("/fonts/Satoshi-BoldItalic.otf") format("opentype");
-  font-weight: 700;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: "Satoshi";
-  src: url("/fonts/Satoshi-Black.otf") format("opentype");
-  font-weight: 900;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Satoshi";
-  src: url("/fonts/Satoshi-BlackItalic.otf") format("opentype");
-  font-weight: 900;
-  font-style: italic;
-}
-
 body {
   margin: 0;
   cursor: none; /* Hide default cursor */
-  background-color: white;
-  color: black;
+  background-color: #fafafa;
+  color: #1a1a1a;
   overflow-x: hidden;
-  font-family: "Satoshi", sans-serif;
 }
 
 /* Ensure text selection color doesn't break the immersion, though optional */
 ::selection {
-  background: #000;
-  color: #fff;
+  background: #1a1a1a;
+  color: #fafafa;
 }
 
 /* Section styles */
 .top-section {
   position: relative;
-  background-color: white;
+  background-color: #fafafa;
   height: 50vh;
   flex-shrink: 0;
 }
 
 .bottom-section {
   position: relative;
-  background-color: #fffbf5;
+  background-color: #1a1a1a;
   height: 50vh;
   flex-shrink: 0;
 }
 
 .bottom-section::selection {
-  background: #000;
-  color: #fff;
+  background: #f5f5f5;
+  color: #1a1a1a;
 }
 
 /* Custom cursor styles */
@@ -121,9 +50,9 @@ body {
   height: 48px;
 }
 
-/* Cursor in top section - white cursor */
+/* Cursor in top section - off-white cursor */
 .custom-cursor-top {
-  background-color: #ffffff;
+  background-color: #fafafa;
 }
 
 /* Cursor in bottom section - yellow cursor */
@@ -155,7 +84,7 @@ body {
   font-weight: bold;
   letter-spacing: -0.025em;
   line-height: 1;
-  color: black;
+  color: #1a1a1a;
   text-align: center;
   margin: 0;
   max-width: 100%;
@@ -209,10 +138,12 @@ body {
 
 .bottom-section h1 {
   font-size: clamp(3rem, 12vw, 15rem);
-  font-weight: 900;
-  letter-spacing: -0.05em;
-  line-height: 0.8;
-  color: #3b82f6;
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-weight: bold;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  color: #f5f5f5;
   mix-blend-mode: normal;
   text-align: center;
   margin: 0;
