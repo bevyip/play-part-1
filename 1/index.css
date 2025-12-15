@@ -1,9 +1,20 @@
+html,
 body {
   margin: 0;
+  padding: 0;
   cursor: none; /* Hide default cursor */
   background-color: #fafafa;
   color: #1a1a1a;
   overflow-x: hidden;
+  overflow-y: hidden;
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
+}
+
+main {
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height for mobile */
+  overflow: hidden;
 }
 
 /* Ensure text selection color doesn't break the immersion, though optional */
@@ -17,14 +28,18 @@ body {
   position: relative;
   background-color: #fafafa;
   height: 50vh;
+  height: 50dvh; /* Dynamic viewport height for mobile */
   flex-shrink: 0;
+  min-height: 0;
 }
 
 .bottom-section {
   position: relative;
   background-color: #1a1a1a;
   height: 50vh;
+  height: 50dvh; /* Dynamic viewport height for mobile */
   flex-shrink: 0;
+  min-height: 0;
 }
 
 .bottom-section::selection {
@@ -65,9 +80,16 @@ body {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding: 2rem;
-  padding-bottom: 4rem;
+  padding: 1rem;
+  padding-bottom: 2rem;
   box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .top-section {
+    padding: 2rem;
+    padding-bottom: 4rem;
+  }
 }
 
 .top-section .text-container {
@@ -78,7 +100,7 @@ body {
 }
 
 .top-section h1 {
-  font-size: clamp(3rem, 12vw, 15rem);
+  font-size: clamp(3.5rem, 12vw, 15rem);
   font-family: "Playfair Display", serif;
   font-style: italic;
   font-weight: bold;
@@ -124,9 +146,16 @@ body {
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding: 2rem;
-  padding-top: 4rem;
+  padding: 1rem;
+  padding-top: 2rem;
   box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .bottom-section {
+    padding: 2rem;
+    padding-top: 4rem;
+  }
 }
 
 .bottom-section .text-container {
@@ -137,7 +166,7 @@ body {
 }
 
 .bottom-section h1 {
-  font-size: clamp(3rem, 12vw, 15rem);
+  font-size: clamp(3.5rem, 12vw, 15rem);
   font-family: "Playfair Display", serif;
   font-style: italic;
   font-weight: bold;

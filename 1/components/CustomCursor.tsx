@@ -5,22 +5,47 @@ const CustomCursor: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const updateCursorPosition = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+    const updateCursorPosition = (x: number, y: number) => {
+      setPosition({ x, y });
       if (!isVisible) setIsVisible(true);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      updateCursorPosition(e.clientX, e.clientY);
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        updateCursorPosition(touch.clientX, touch.clientY);
+      }
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        updateCursorPosition(touch.clientX, touch.clientY);
+      }
     };
 
     const handleMouseEnter = () => setIsVisible(true);
     const handleMouseLeave = () => setIsVisible(false);
+    const handleTouchEnd = () => setIsVisible(false);
 
-    window.addEventListener("mousemove", updateCursorPosition);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
     document.addEventListener("mouseenter", handleMouseEnter);
     document.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("touchend", handleTouchEnd);
 
     return () => {
-      window.removeEventListener("mousemove", updateCursorPosition);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleTouchMove);
+      window.removeEventListener("touchstart", handleTouchStart);
       document.removeEventListener("mouseenter", handleMouseEnter);
       document.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("touchend", handleTouchEnd);
     };
   }, [isVisible]);
 
