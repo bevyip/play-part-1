@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 const CustomCursor: React.FC = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isVisible, setIsVisible] = useState(false);
   const [isOverText, setIsOverText] = useState(false);
+  const rafId = useRef<number | null>(null);
+  const lastTextCheck = useRef<number>(0);
+  const pendingPosition = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
     const checkIfOverText = (x: number, y: number): boolean => {
@@ -25,11 +28,31 @@ const CustomCursor: React.FC = () => {
       return false;
     };
 
-    const updateCursorPosition = (x: number, y: number) => {
-      setPosition({ x, y });
-      const overText = checkIfOverText(x, y);
-      setIsOverText(overText);
-      if (!isVisible) setIsVisible(true);
+    const updateCursorPosition = (x: number, y: number, skipTextCheck = false) => {
+      pendingPosition.current = { x, y };
+      
+      // Throttle text checking to reduce lag
+      const now = Date.now();
+      const shouldCheckText = !skipTextCheck && (now - lastTextCheck.current > 50);
+      
+      if (rafId.current) {
+        cancelAnimationFrame(rafId.current);
+      }
+
+      rafId.current = requestAnimationFrame(() => {
+        if (pendingPosition.current) {
+          setPosition(pendingPosition.current);
+          
+          if (shouldCheckText) {
+            const overText = checkIfOverText(pendingPosition.current.x, pendingPosition.current.y);
+            setIsOverText(overText);
+            lastTextCheck.current = now;
+          }
+          
+          if (!isVisible) setIsVisible(true);
+          pendingPosition.current = null;
+        }
+      });
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -37,13 +60,15 @@ const CustomCursor: React.FC = () => {
     };
 
     const handleTouchMove = (e: TouchEvent) => {
+      // CSS touch-action: none handles preventing default behaviors
       if (e.touches.length > 0) {
         const touch = e.touches[0];
-        updateCursorPosition(touch.clientX, touch.clientY);
+        updateCursorPosition(touch.clientX, touch.clientY, true); // Skip text check on touch move for performance
       }
     };
 
     const handleTouchStart = (e: TouchEvent) => {
+      // CSS touch-action: none handles preventing default behaviors
       if (e.touches.length > 0) {
         const touch = e.touches[0];
         updateCursorPosition(touch.clientX, touch.clientY);
@@ -68,6 +93,9 @@ const CustomCursor: React.FC = () => {
       document.removeEventListener("mouseenter", handleMouseEnter);
       document.removeEventListener("mouseleave", handleMouseLeave);
       window.removeEventListener("touchend", handleTouchEnd);
+      if (rafId.current) {
+        cancelAnimationFrame(rafId.current);
+      }
     };
   }, [isVisible]);
 

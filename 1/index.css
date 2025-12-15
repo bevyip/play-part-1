@@ -9,12 +9,23 @@ body {
   overflow-y: hidden;
   height: 100vh;
   height: 100dvh; /* Dynamic viewport height for mobile */
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+  -webkit-touch-callout: none; /* Disable callout on long press */
+  touch-action: none; /* Prevent default touch behaviors */
 }
 
 main {
   height: 100vh;
   height: 100dvh; /* Dynamic viewport height for mobile */
   overflow: hidden;
+  touch-action: none; /* Prevent default touch behaviors */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Hide default touch indicators on all elements */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
 /* Ensure text selection color doesn't break the immersion, though optional */
