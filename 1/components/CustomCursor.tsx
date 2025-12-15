@@ -10,6 +10,7 @@ const CustomCursor: React.FC = () => {
   const touchPosition = useRef({ x: 0, y: 0 });
   const isTouchMode = useRef(false);
   const isOverTextRef = useRef(false);
+  const isVisibleRef = useRef(false);
 
   useEffect(() => {
     const checkIfOverText = (x: number, y: number): boolean => {
@@ -73,11 +74,13 @@ const CustomCursor: React.FC = () => {
           lastTextCheck.current = now;
         }
 
-        if (!isVisible) setIsVisible(true);
+        if (!isVisibleRef.current) {
+          setIsVisible(true);
+          isVisibleRef.current = true;
+        }
       });
     };
 
-    let touchTextCheckRaf: number | null = null;
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches.length > 0) {
         isTouchMode.current = true;
@@ -85,26 +88,9 @@ const CustomCursor: React.FC = () => {
         touchPosition.current = { x: touch.clientX, y: touch.clientY };
 
         // Update DOM directly for immediate response (no React re-render lag)
-        // Use ref for current isOverText value (avoids stale closure)
-        const scale = isOverTextRef.current ? 1.5 : 1;
+        // Disable scaling on mobile - always use scale 1
+        const scale = 1;
         updateCursorDOM(touch.clientX, touch.clientY, scale, true);
-
-        // Throttle text checking for touch (check every 100ms)
-        const now = Date.now();
-        if (now - lastTextCheck.current > 100) {
-          if (touchTextCheckRaf) {
-            cancelAnimationFrame(touchTextCheckRaf);
-          }
-          touchTextCheckRaf = requestAnimationFrame(() => {
-            const overText = checkIfOverText(touch.clientX, touch.clientY);
-            setIsOverText(overText);
-            isOverTextRef.current = overText;
-            lastTextCheck.current = now;
-            // Update scale if it changed
-            const newScale = overText ? 1.5 : 1;
-            updateCursorDOM(touch.clientX, touch.clientY, newScale, true);
-          });
-        }
       }
     };
 
@@ -113,12 +99,11 @@ const CustomCursor: React.FC = () => {
       if (e.touches.length > 0) {
         const touch = e.touches[0];
         touchPosition.current = { x: touch.clientX, y: touch.clientY };
-        const overText = checkIfOverText(touch.clientX, touch.clientY);
-        setIsOverText(overText);
-        isOverTextRef.current = overText;
-        const scale = overText ? 1.5 : 1;
+        // Disable scaling on mobile - always use scale 1
+        const scale = 1;
         updateCursorDOM(touch.clientX, touch.clientY, scale, true);
         setIsVisible(true);
+        isVisibleRef.current = true;
       }
     };
 
@@ -131,10 +116,17 @@ const CustomCursor: React.FC = () => {
         false
       );
       setIsVisible(false);
+      isVisibleRef.current = false;
     };
 
-    const handleMouseEnter = () => setIsVisible(true);
-    const handleMouseLeave = () => setIsVisible(false);
+    const handleMouseEnter = () => {
+      setIsVisible(true);
+      isVisibleRef.current = true;
+    };
+    const handleMouseLeave = () => {
+      setIsVisible(false);
+      isVisibleRef.current = false;
+    };
 
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("touchmove", handleTouchMove, { passive: true });
@@ -153,11 +145,8 @@ const CustomCursor: React.FC = () => {
       if (rafId.current) {
         cancelAnimationFrame(rafId.current);
       }
-      if (touchTextCheckRaf) {
-        cancelAnimationFrame(touchTextCheckRaf);
-      }
     };
-  }, [isVisible]);
+  }, []); // Empty dependency array - effect only runs once on mount
 
   const cursorSize = 48;
   const scale = isOverText ? 1.5 : 1;
