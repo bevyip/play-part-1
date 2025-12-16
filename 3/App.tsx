@@ -99,7 +99,7 @@ const App: React.FC = () => {
               transitionProperty: "transform",
               transitionDuration: "3000ms",
               transitionTimingFunction: "linear",
-              transitionDelay: gameStatus === "FINISHED" ? "2000ms" : "0ms",
+              transitionDelay: gameStatus === "FINISHED" ? "3000ms" : "0ms",
             }}
             onTransitionEnd={(e) => {
               // Ensure we only trigger on the specific property and state
