@@ -76,7 +76,7 @@ const App: React.FC = () => {
           }}
           className={`text-3xl text-[#0057AD] mb-4 transition-all ease-out ${
             gameStatus === "FINISHED"
-              ? "opacity-100 delay-[1000ms] duration-1000"
+              ? "opacity-100 delay-[1500ms] duration-1000"
               : "opacity-0 duration-0"
           }`}
         >
@@ -87,7 +87,7 @@ const App: React.FC = () => {
         <div
           className={`mt-4 w-36 h-1.5 bg-black/10 rounded-full overflow-hidden transition-opacity ease-out ${
             gameStatus === "FINISHED"
-              ? "opacity-100 delay-[3000ms] duration-1000"
+              ? "opacity-100 delay-[3000ms] duration-1500"
               : "opacity-0 duration-0"
           }`}
         >
