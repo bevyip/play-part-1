@@ -31,7 +31,7 @@ const App: React.FC = () => {
             letterSpacing: "0.06em",
           }}
         >
-          don't be shy — move your cursor
+          don't be shy — draw a line
         </p>
       </div>
 
