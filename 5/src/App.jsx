@@ -50,9 +50,9 @@ export default function App() {
             WebkitBackdropFilter: "blur(10px)",
             border: "1px solid rgba(255, 255, 255, 0.3)",
             borderRadius: "9999px",
-            padding: "14px 32px",
+            padding: "10px 24px",
             color: "white",
-            fontSize: "24px",
+            fontSize: "18px",
             fontFamily:
               '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
             fontWeight: 500,
