@@ -36,7 +36,7 @@ const App: React.FC = () => {
       </div>
 
       {/* Color Picker Wrapper */}
-      <div className="fixed top-8 right-8 z-50">
+      <div className="fixed top-8 left-8 z-50">
         <div className="relative w-10 h-10 hover:scale-110 active:scale-95 transition-transform duration-300">
           {/* Visual Button Representation */}
           <div
