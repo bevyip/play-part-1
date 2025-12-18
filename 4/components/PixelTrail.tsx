@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useCallback } from "react";
+
+import React, { useRef, useEffect, useCallback } from 'react';
 
 interface PixelTrailProps {
   accentColor: string;
@@ -13,15 +14,15 @@ interface ActiveCell {
   hoverTime: number;
 }
 
-const PixelTrail: React.FC<PixelTrailProps> = ({
-  accentColor = "#00f2ff",
-  cellSize = 20,
-  fadeSpeed = 0.02,
+const PixelTrail: React.FC<PixelTrailProps> = ({ 
+  accentColor = '#00f2ff', 
+  cellSize = 20, 
+  fadeSpeed = 0.02
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const activeCellsRef = useRef<Map<string, ActiveCell>>(new Map());
-  const lastPosRef = useRef<{ x: number; y: number } | null>(null);
-  const animationFrameRef = useRef<number | null>(null);
+  const lastPosRef = useRef<{ x: number, y: number } | null>(null);
+  const animationFrameRef = useRef<number>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -32,53 +33,39 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
       canvas.height = window.innerHeight;
     };
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
     handleResize();
 
-    return () => window.removeEventListener("resize", handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const getCellCoords = (mouseX: number, mouseY: number) => {
     return {
       cx: Math.floor(mouseX / cellSize),
-      cy: Math.floor(mouseY / cellSize),
+      cy: Math.floor(mouseY / cellSize)
     };
   };
 
-  const activateCell = useCallback(
-    (
-      cx: number,
-      cy: number,
-      boost: number = 0,
-      initialOpacity: number = 0.6
-    ) => {
-      const key = `${cx}-${cy}`;
-      const existing = activeCellsRef.current.get(key);
+  const activateCell = useCallback((cx: number, cy: number, boost: number = 0, initialOpacity: number = 0.6) => {
+    const key = `${cx}-${cy}`;
+    const existing = activeCellsRef.current.get(key);
+    
+    activeCellsRef.current.set(key, {
+      x: cx,
+      y: cy,
+      opacity: Math.min(1.0, (existing?.opacity || 0) + initialOpacity + boost),
+      hoverTime: existing ? existing.hoverTime + 1 : 1
+    });
+  }, [cellSize]);
 
-      activeCellsRef.current.set(key, {
-        x: cx,
-        y: cy,
-        opacity: Math.min(
-          1.0,
-          (existing?.opacity || 0) + initialOpacity + boost
-        ),
-        hoverTime: existing ? existing.hoverTime + 1 : 1,
-      });
-    },
-    [cellSize]
-  );
-
-  const activateBrush = useCallback(
-    (cx: number, cy: number, boost: number = 0) => {
-      // 2x2 cluster for a refined trail size
-      for (let i = 0; i <= 1; i++) {
-        for (let j = 0; j <= 1; j++) {
-          activateCell(cx + i, cy + j, boost, 0.5);
-        }
+  const activateBrush = useCallback((cx: number, cy: number, boost: number = 0) => {
+    // 2x2 cluster for a refined trail size
+    for (let i = 0; i <= 1; i++) {
+      for (let j = 0; j <= 1; j++) {
+        activateCell(cx + i, cy + j, boost, 0.5);
       }
-    },
-    [activateCell]
-  );
+    }
+  }, [activateCell]);
 
   const interpolateLine = (x0: number, y0: number, x1: number, y1: number) => {
     const dx = Math.abs(x1 - x0);
@@ -141,22 +128,16 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
   };
 
   const handleMouseDown = (e: React.MouseEvent | React.TouchEvent) => {
-    const clientX =
-      "touches" in e
-        ? (e as React.TouchEvent).touches[0].clientX
-        : (e as React.MouseEvent).clientX;
-    const clientY =
-      "touches" in e
-        ? (e as React.TouchEvent).touches[0].clientY
-        : (e as React.MouseEvent).clientY;
-
+    const clientX = 'touches' in e ? (e as React.TouchEvent).touches[0].clientX : (e as React.MouseEvent).clientX;
+    const clientY = 'touches' in e ? (e as React.TouchEvent).touches[0].clientY : (e as React.MouseEvent).clientY;
+    
     const rect = canvasRef.current?.getBoundingClientRect();
     if (!rect) return;
-
+    
     const x = clientX - rect.left;
     const y = clientY - rect.top;
     const { cx, cy } = getCellCoords(x, y);
-
+    
     for (let i = -1; i <= 1; i++) {
       for (let j = -1; j <= 1; j++) {
         activateCell(cx + i, cy + j, 0.4, 0.4);
@@ -169,9 +150,7 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
   };
 
   const hexToRgb = (hex: string) => {
-    let r = 0,
-      g = 0,
-      b = 0;
+    let r = 0, g = 0, b = 0;
     if (hex.length === 4) {
       r = parseInt(hex[1] + hex[1], 16);
       g = parseInt(hex[2] + hex[2], 16);
@@ -187,14 +166,14 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d", { alpha: false });
+    const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return;
 
     const draw = () => {
-      ctx.fillStyle = "#050505";
+      ctx.fillStyle = '#050505';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
       ctx.lineWidth = 0.5;
 
       if (cellSize >= 5) {
@@ -225,38 +204,24 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
         const xPos = cell.x * cellSize;
         const yPos = cell.y * cellSize;
 
-        const glowRadius = cellSize * 2.0;
+        const glowRadius = cellSize * 2.0; 
         const centerX = xPos + cellSize / 2;
         const centerY = yPos + cellSize / 2;
-
+        
         const gradient = ctx.createRadialGradient(
-          centerX,
-          centerY,
-          0,
-          centerX,
-          centerY,
-          glowRadius
+          centerX, centerY, 0,
+          centerX, centerY, glowRadius
         );
-
+        
         gradient.addColorStop(0, `rgba(${rgb}, ${cell.opacity * 0.2})`);
-        gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
         ctx.fillStyle = gradient;
-        ctx.fillRect(
-          centerX - glowRadius,
-          centerY - glowRadius,
-          glowRadius * 2,
-          glowRadius * 2
-        );
+        ctx.fillRect(centerX - glowRadius, centerY - glowRadius, glowRadius * 2, glowRadius * 2);
 
         ctx.fillStyle = `rgba(${rgb}, ${cell.opacity})`;
         const padding = 1;
-        ctx.fillRect(
-          xPos + padding,
-          yPos + padding,
-          cellSize - padding * 2,
-          cellSize - padding * 2
-        );
+        ctx.fillRect(xPos + padding, yPos + padding, cellSize - padding * 2, cellSize - padding * 2);
       });
 
       animationFrameRef.current = requestAnimationFrame(draw);
@@ -264,8 +229,7 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
 
     animationFrameRef.current = requestAnimationFrame(draw);
     return () => {
-      if (animationFrameRef.current)
-        cancelAnimationFrame(animationFrameRef.current);
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
     };
   }, [cellSize, accentColor, fadeSpeed]);
 
@@ -278,7 +242,7 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
       onTouchStart={handleMouseDown}
       onMouseLeave={handleMouseLeave}
       onTouchEnd={handleMouseLeave}
-      style={{ touchAction: "none" }}
+      style={{ touchAction: 'none' }}
       className="block w-full h-full cursor-crosshair bg-[#050505]"
     />
   );
