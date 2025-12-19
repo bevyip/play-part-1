@@ -145,7 +145,7 @@
 @media (max-width: 768px) {
   .sticker-image,
   .flap-image {
-    width: 120px !important;
+    width: 80px !important;
   }
 }
 

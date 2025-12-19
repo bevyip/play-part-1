@@ -1,3 +1,31 @@
+.app-wrapper {
+  min-height: 100vh;
+  width: 100vw;
+  background: #0f0f0f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.app-header {
+  text-align: center;
+}
+
+.app-title {
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.app-subtitle {
+  color: #aaaaaa;
+  font-size: 1.1rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
 .app-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -5,10 +33,8 @@
   gap: 40px;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  width: 100vw;
-  padding: 40px;
-  background: #0f0f0f;
+  width: 100%;
+  max-width: 800px;
 }
 
 .sticker-wrapper {
@@ -19,12 +45,25 @@
 
 /* Mobile styles */
 @media (max-width: 768px) {
+  .app-wrapper {
+    padding: 20px 10px;
+  }
+
+  .app-header {
+    margin-bottom: 20px;
+  }
+
+  .app-title {
+    font-size: 1.8rem;
+    margin-bottom: 8px;
+  }
+
+  .app-subtitle {
+    font-size: 0.9rem;
+  }
+
   .app-container {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    gap: 20px;
-    padding: 20px;
-    min-height: auto;
-    height: auto;
+    gap: 15px;
+    max-width: 100%;
   }
 }
