@@ -141,6 +141,14 @@
   width: var(--sticker-width, 200px);
 }
 
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .sticker-image,
+  .flap-image {
+    width: 120px !important;
+  }
+}
+
 .sticker-main,
 .flap {
   will-change: clip-path, transform;

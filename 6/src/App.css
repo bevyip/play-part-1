@@ -1,0 +1,30 @@
+.app-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 40px;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  padding: 40px;
+  background: #0f0f0f;
+}
+
+.sticker-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .app-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 20px;
+    padding: 20px;
+    min-height: auto;
+    height: auto;
+  }
+}
