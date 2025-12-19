@@ -45,10 +45,6 @@
 
 /* Mobile styles */
 @media (max-width: 768px) {
-  .app-wrapper {
-    padding: 20px 10px;
-  }
-
   .app-header {
     margin-bottom: 20px;
   }
@@ -63,7 +59,7 @@
   }
 
   .app-container {
-    gap: 15px;
+    gap: 0;
     max-width: 100%;
   }
 }
