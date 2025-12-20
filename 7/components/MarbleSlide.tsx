@@ -1,9 +1,8 @@
-
-import React, { useMemo, useRef, useEffect } from 'react';
-import * as THREE from 'three';
-import { useFrame, ThreeElements } from '@react-three/fiber';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useMemo, useRef, useEffect } from "react";
+import * as THREE from "three";
+import { useFrame, ThreeElements } from "@react-three/fiber";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 declare global {
   namespace React {
@@ -22,7 +21,10 @@ interface MarbleSlideProps {
   lookAtY: number;
 }
 
-export const MarbleSlide: React.FC<MarbleSlideProps> = ({ camPos, lookAtY }) => {
+export const MarbleSlide: React.FC<MarbleSlideProps> = ({
+  camPos,
+  lookAtY,
+}) => {
   const marbleRef = useRef<THREE.Mesh>(null);
   const scrollProgress = useRef({ value: 0, lastValue: 0 });
 
@@ -32,7 +34,7 @@ export const MarbleSlide: React.FC<MarbleSlideProps> = ({ camPos, lookAtY }) => 
   const slideHeight = 40;
   const slideRadius = 8.5;
   const slideTurns = 4.125;
-  
+
   // Increased marble size from 0.6 to 1.1 for a more prominent look
   const marbleRadius = 1.1;
 
@@ -45,15 +47,15 @@ export const MarbleSlide: React.FC<MarbleSlideProps> = ({ camPos, lookAtY }) => 
       const angle = t * Math.PI * 2 * slideTurns;
       const x = Math.cos(angle) * slideRadius;
       const z = Math.sin(angle) * slideRadius;
-      const y = (slideHeight / 2) - (t * slideHeight); 
+      const y = slideHeight / 2 - t * slideHeight;
       points.push(new THREE.Vector3(x, y, z));
     }
     return new THREE.CatmullRomCurve3(points);
   }, [slideHeight, slideRadius, slideTurns]);
 
   const slideGeometry = useMemo(() => {
-    const segments = 300; 
-    const radialSegments = 32; 
+    const segments = 300;
+    const radialSegments = 32;
     const vertices: number[] = [];
     const indices: number[] = [];
     const normals: number[] = [];
@@ -61,7 +63,9 @@ export const MarbleSlide: React.FC<MarbleSlideProps> = ({ camPos, lookAtY }) => 
     const getFrame = (t: number) => {
       const tangent = curve.getTangentAt(t).normalize();
       const worldUp = new THREE.Vector3(0, 1, 0);
-      const right = new THREE.Vector3().crossVectors(tangent, worldUp).normalize();
+      const right = new THREE.Vector3()
+        .crossVectors(tangent, worldUp)
+        .normalize();
       const up = new THREE.Vector3().crossVectors(right, tangent).normalize();
       return { right, up };
     };
@@ -73,8 +77,26 @@ export const MarbleSlide: React.FC<MarbleSlideProps> = ({ camPos, lookAtY }) => 
       for (let j = 0; j <= radialSegments; j++) {
         // Create the bottom semi-circle for the slide
         const theta = Math.PI + (j / radialSegments) * Math.PI;
-        const iv = p.clone().add(right.clone().multiplyScalar(Math.cos(theta) * slideInnerRadius)).add(up.clone().multiplyScalar(Math.sin(theta) * slideInnerRadius));
-        const ov = p.clone().add(right.clone().multiplyScalar(Math.cos(theta) * (slideInnerRadius + slideThickness))).add(up.clone().multiplyScalar(Math.sin(theta) * (slideInnerRadius + slideThickness)));
+        const iv = p
+          .clone()
+          .add(right.clone().multiplyScalar(Math.cos(theta) * slideInnerRadius))
+          .add(up.clone().multiplyScalar(Math.sin(theta) * slideInnerRadius));
+        const ov = p
+          .clone()
+          .add(
+            right
+              .clone()
+              .multiplyScalar(
+                Math.cos(theta) * (slideInnerRadius + slideThickness)
+              )
+          )
+          .add(
+            up
+              .clone()
+              .multiplyScalar(
+                Math.sin(theta) * (slideInnerRadius + slideThickness)
+              )
+          );
         vertices.push(iv.x, iv.y, iv.z, ov.x, ov.y, ov.z);
         const n = iv.clone().sub(p).normalize();
         normals.push(n.x, n.y, n.z, n.x, n.y, n.z);
@@ -88,12 +110,25 @@ export const MarbleSlide: React.FC<MarbleSlideProps> = ({ camPos, lookAtY }) => 
         const i1 = i0 + 2;
         const i2 = (i + 1) * stride + j * 2;
         const i3 = i2 + 2;
-        indices.push(i0, i2, i1, i1, i2, i3, i0 + 1, i1 + 1, i2 + 1, i1 + 1, i3 + 1, i2 + 1);
+        indices.push(
+          i0,
+          i2,
+          i1,
+          i1,
+          i2,
+          i3,
+          i0 + 1,
+          i1 + 1,
+          i2 + 1,
+          i1 + 1,
+          i3 + 1,
+          i2 + 1
+        );
       }
     }
     const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-    geo.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+    geo.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
+    geo.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
     geo.setIndex(indices);
     return geo;
   }, [curve, slideInnerRadius]);
@@ -101,14 +136,14 @@ export const MarbleSlide: React.FC<MarbleSlideProps> = ({ camPos, lookAtY }) => 
   useEffect(() => {
     const trigger = ScrollTrigger.create({
       trigger: document.body,
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 1.2, 
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 1.2,
       onUpdate: (self) => {
         gsap.to(scrollProgress.current, {
           value: self.progress,
           duration: 0.1,
-          overwrite: 'auto'
+          overwrite: "auto",
         });
       },
     });
@@ -128,12 +163,16 @@ export const MarbleSlide: React.FC<MarbleSlideProps> = ({ camPos, lookAtY }) => 
     const point = curve.getPointAt(currentP);
     const tangent = curve.getTangentAt(currentP).normalize();
     const worldUp = new THREE.Vector3(0, 1, 0);
-    const right = new THREE.Vector3().crossVectors(tangent, worldUp).normalize();
+    const right = new THREE.Vector3()
+      .crossVectors(tangent, worldUp)
+      .normalize();
     const up = new THREE.Vector3().crossVectors(right, tangent).normalize();
 
     // Position the marble so it touches the bottom of the slide
     const marbleOffset = -slideInnerRadius + marbleRadius;
-    const marblePos = point.clone().add(up.clone().multiplyScalar(marbleOffset));
+    const marblePos = point
+      .clone()
+      .add(up.clone().multiplyScalar(marbleOffset));
     marbleRef.current.position.copy(marblePos);
 
     // Add some rotation based on movement for a "rolling" effect
@@ -146,10 +185,10 @@ export const MarbleSlide: React.FC<MarbleSlideProps> = ({ camPos, lookAtY }) => 
     <group>
       {/* Futuristic Glass Slide */}
       <mesh geometry={slideGeometry} castShadow receiveShadow>
-        <meshPhysicalMaterial 
+        <meshPhysicalMaterial
           color="#1a0033"
           transparent={true}
-          opacity={0.6}
+          opacity={0.65}
           roughness={0.01}
           metalness={0.2}
           transmission={1.0}
@@ -158,9 +197,9 @@ export const MarbleSlide: React.FC<MarbleSlideProps> = ({ camPos, lookAtY }) => 
           attenuationColor="#ff00ff"
           attenuationDistance={1.5}
           clearcoat={1.0}
-          envMapIntensity={3.0}
+          envMapIntensity={4.0}
           emissive="#4b0082"
-          emissiveIntensity={1.5}
+          emissiveIntensity={2.0}
           side={THREE.DoubleSide}
         />
       </mesh>
@@ -179,7 +218,12 @@ export const MarbleSlide: React.FC<MarbleSlideProps> = ({ camPos, lookAtY }) => 
           envMapIntensity={5}
         />
         {/* Intensified point light to make the marble feel "lit up" */}
-        <pointLight intensity={80} distance={20} color="#00FFFF" position={[0, 0, 0]} />
+        <pointLight
+          intensity={80}
+          distance={20}
+          color="#00FFFF"
+          position={[0, 0, 0]}
+        />
       </mesh>
     </group>
   );

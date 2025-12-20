@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
 const SpacerSection: React.FC = () => (
   <div className="h-screen w-full flex items-center justify-center pointer-events-none" />
@@ -10,11 +9,11 @@ export const UIOverlay: React.FC = () => {
   const [isDownActive, setIsDownActive] = useState(false);
   const scrollIntervalRef = useRef<number | null>(null);
 
-  const startScrolling = useCallback((direction: 'up' | 'down') => {
+  const startScrolling = useCallback((direction: "up" | "down") => {
     if (scrollIntervalRef.current) return;
-    const scrollAmount = direction === 'up' ? -15 : 15;
+    const scrollAmount = direction === "up" ? -15 : 15;
     scrollIntervalRef.current = window.setInterval(() => {
-      window.scrollBy({ top: scrollAmount, behavior: 'auto' });
+      window.scrollBy({ top: scrollAmount, behavior: "auto" });
     }, 16);
   }, []);
 
@@ -27,30 +26,30 @@ export const UIOverlay: React.FC = () => {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowUp') {
+      if (e.key === "ArrowUp") {
         setIsUpActive(true);
-        startScrolling('up');
-      } else if (e.key === 'ArrowDown') {
+        startScrolling("up");
+      } else if (e.key === "ArrowDown") {
         setIsDownActive(true);
-        startScrolling('down');
+        startScrolling("down");
       }
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowUp') {
+      if (e.key === "ArrowUp") {
         setIsUpActive(false);
         stopScrolling();
-      } else if (e.key === 'ArrowDown') {
+      } else if (e.key === "ArrowDown") {
         setIsDownActive(false);
         stopScrolling();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
       stopScrolling();
     };
   }, [startScrolling, stopScrolling]);
@@ -65,35 +64,87 @@ export const UIOverlay: React.FC = () => {
       </header>
 
       {/* Control Indicators */}
-      <div className="fixed bottom-12 right-12 flex flex-col gap-4 z-30 pointer-events-auto">
+      <div className="fixed bottom-8 right-8 md:bottom-12 md:right-12 flex flex-col gap-3 md:gap-4 z-30 pointer-events-auto">
         <button
-          onMouseDown={() => { setIsUpActive(true); startScrolling('up'); }}
-          onMouseUp={() => { setIsUpActive(false); stopScrolling(); }}
-          onMouseLeave={() => { setIsUpActive(false); stopScrolling(); }}
-          onTouchStart={(e) => { e.preventDefault(); setIsUpActive(true); startScrolling('up'); }}
-          onTouchEnd={() => { setIsUpActive(false); stopScrolling(); }}
-          className={`w-14 h-14 flex items-center justify-center rounded-xl border-2 border-white/30 text-white transition-all duration-150 ${
-            isUpActive ? 'bg-white/40 border-white/60 scale-95' : 'bg-white/5 hover:bg-white/10'
+          onMouseDown={() => {
+            setIsUpActive(true);
+            startScrolling("up");
+          }}
+          onMouseUp={() => {
+            setIsUpActive(false);
+            stopScrolling();
+          }}
+          onMouseLeave={() => {
+            setIsUpActive(false);
+            stopScrolling();
+          }}
+          onTouchStart={(e) => {
+            e.preventDefault();
+            setIsUpActive(true);
+            startScrolling("up");
+          }}
+          onTouchEnd={() => {
+            setIsUpActive(false);
+            stopScrolling();
+          }}
+          className={`w-10 h-10 md:w-14 md:h-14 flex items-center justify-center rounded-xl border-2 border-white/30 text-white transition-all duration-150 ${
+            isUpActive
+              ? "bg-white/40 border-white/60 scale-95"
+              : "bg-white/5 hover:bg-white/10"
           }`}
           aria-label="Scroll Up"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            className="w-5 h-5 md:w-6 md:h-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <polyline points="18 15 12 9 6 15"></polyline>
           </svg>
         </button>
 
         <button
-          onMouseDown={() => { setIsDownActive(true); startScrolling('down'); }}
-          onMouseUp={() => { setIsDownActive(false); stopScrolling(); }}
-          onMouseLeave={() => { setIsDownActive(false); stopScrolling(); }}
-          onTouchStart={(e) => { e.preventDefault(); setIsDownActive(true); startScrolling('down'); }}
-          onTouchEnd={() => { setIsDownActive(false); stopScrolling(); }}
-          className={`w-14 h-14 flex items-center justify-center rounded-xl border-2 border-white/30 text-white transition-all duration-150 ${
-            isDownActive ? 'bg-white/40 border-white/60 scale-95' : 'bg-white/5 hover:bg-white/10'
+          onMouseDown={() => {
+            setIsDownActive(true);
+            startScrolling("down");
+          }}
+          onMouseUp={() => {
+            setIsDownActive(false);
+            stopScrolling();
+          }}
+          onMouseLeave={() => {
+            setIsDownActive(false);
+            stopScrolling();
+          }}
+          onTouchStart={(e) => {
+            e.preventDefault();
+            setIsDownActive(true);
+            startScrolling("down");
+          }}
+          onTouchEnd={() => {
+            setIsDownActive(false);
+            stopScrolling();
+          }}
+          className={`w-10 h-10 md:w-14 md:h-14 flex items-center justify-center rounded-xl border-2 border-white/30 text-white transition-all duration-150 ${
+            isDownActive
+              ? "bg-white/40 border-white/60 scale-95"
+              : "bg-white/5 hover:bg-white/10"
           }`}
           aria-label="Scroll Down"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <svg
+            className="w-5 h-5 md:w-6 md:h-6"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </button>
