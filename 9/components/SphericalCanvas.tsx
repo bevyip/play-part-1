@@ -34,7 +34,7 @@ const SceneContent: React.FC<
 
   // Detect mobile and adjust camera/zoom accordingly
   const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-  const cameraZ = isMobile ? 70 : 55; // Further away on mobile
+  const cameraZ = isMobile ? 80 : 55; // Further away on mobile
   const minDistance = isMobile ? 30 : 30; // Allow closer zoom on mobile
   const maxDistance = isMobile ? 90 : 70; // Adjusted max zoom for mobile
 

@@ -1,8 +1,7 @@
-
-import React, { useState } from 'react';
-import SphericalCanvas from './components/SphericalCanvas';
-import ItemModal from './components/ItemModal';
-import { FashionItem } from './types';
+import React, { useState } from "react";
+import SphericalCanvas from "./components/SphericalCanvas";
+import ItemModal from "./components/ItemModal";
+import { FashionItem } from "./types";
 
 const App: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<FashionItem | null>(null);
@@ -10,17 +9,14 @@ const App: React.FC = () => {
   return (
     <div className="relative w-full h-screen bg-[#050505] overflow-hidden">
       {/* Main Content (3D Spherical Canvas) */}
-      <SphericalCanvas 
-        onItemClick={setSelectedItem} 
+      <SphericalCanvas
+        onItemClick={setSelectedItem}
         isModalOpen={!!selectedItem}
       />
 
       {/* Overlay Modal */}
       {selectedItem && (
-        <ItemModal 
-          item={selectedItem} 
-          onClose={() => setSelectedItem(null)} 
-        />
+        <ItemModal item={selectedItem} onClose={() => setSelectedItem(null)} />
       )}
 
       {/* Fixed Footer hint */}
